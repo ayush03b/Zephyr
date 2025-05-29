@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
+from pydantic.types import conint
 
 class ThreadBase(BaseModel):
     content: str
@@ -11,18 +12,18 @@ class ThreadCreate(ThreadBase):
 class ThreadUpdate(BaseModel):
     content: Optional[str]
 
-class ThreadResponse(BaseModel):
-    content: str
-    posted_at: datetime
-    class Config:
-        from_attributes = True
-
 class UserBase(BaseModel):
     email: EmailStr
     username: str
 
 class UserCreate(UserBase):
     password: str
+
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
 
 class UserResponse(UserBase):
     id: int
@@ -31,9 +32,20 @@ class UserResponse(UserBase):
     class Config:
         from_attributes = True
 
-class UserLogin(BaseModel):
-    email: EmailStr
-    password: str
+class Thread(ThreadBase):
+    id: int
+    posted_at: datetime
+    owner_id: int
+    owner: UserResponse
+    class Config:
+        from_attributes = True
+
+class ThreadResponse(BaseModel):
+    Thread: Thread
+    votes: int
+
+    class config:
+        from_attributes = True
 
 class Token(BaseModel):
     access_token: str
@@ -41,3 +53,7 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     id: int | None = None
+
+class Vote(BaseModel):
+    thread_id: int
+    dir: conint(le=1)

@@ -1,6 +1,6 @@
 from app import models, schemas
 from app.api.deps import db_dependency
-from fastapi import status, HTTPException, APIRouter, Depends
+from fastapi import status, HTTPException, APIRouter
 from typing import List
 from app.core import security
 
