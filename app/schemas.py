@@ -3,18 +3,23 @@ from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
 from pydantic.types import conint
 
+
 class ThreadBase(BaseModel):
     content: str
+
 
 class ThreadCreate(ThreadBase):
     pass
 
+
 class ThreadUpdate(BaseModel):
     content: Optional[str]
+
 
 class UserBase(BaseModel):
     email: EmailStr
     username: str
+
 
 class UserCreate(UserBase):
     password: str
@@ -32,13 +37,16 @@ class UserResponse(UserBase):
     class Config:
         from_attributes = True
 
+
 class Thread(ThreadBase):
     id: int
     posted_at: datetime
     owner_id: int
     owner: UserResponse
+
     class Config:
         from_attributes = True
+
 
 class ThreadResponse(BaseModel):
     Thread: Thread
@@ -47,12 +55,15 @@ class ThreadResponse(BaseModel):
     class config:
         from_attributes = True
 
+
 class Token(BaseModel):
     access_token: str
     token_type: str
 
+
 class TokenData(BaseModel):
     id: int | None = None
+
 
 class Vote(BaseModel):
     thread_id: int
